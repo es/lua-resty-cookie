@@ -6,9 +6,6 @@ local type          = type
 local byte          = string.byte
 local sub           = string.sub
 local format        = string.format
-local log           = ngx.log
-local ERR           = ngx.ERR
-local ngx_header    = ngx.header
 
 local EQUAL         = byte("=")
 local SEMICOLON     = byte(";")
@@ -33,7 +30,7 @@ _M._VERSION = '0.01'
 
 local function get_cookie_table(text_cookie)
     if type(text_cookie) ~= "string" then
-        log(ERR, format("expect text_cookie to be \"string\" but found %s",
+        ngx.log(ngx.ERR, format("expect text_cookie to be \"string\" but found %s",
                 type(text_cookie)))
         return {}
     end
@@ -153,6 +150,7 @@ function _M.set(self, cookie)
         return nil, err
     end
 
+    local ngx_header = ngx.header
     local set_cookie = ngx_header['Set-Cookie']
     local set_cookie_type = type(set_cookie)
     local t = self.set_cookie_table
